@@ -60,16 +60,16 @@ public class NginxLogSplitter extends BaseBasicBolt {
         outputFieldsDeclarer.declareStream("ipValStream", new Fields("ipVal"));
     }
 
-    public Map<String, String> logSplitter(String log) {
+    private Map<String, String> logSplitter(String log) {
         String regex = "\\[(\\d{2}/\\w{3}/\\d{4}).*(adx=\\S*)";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(log);
-        Map<String, String> filterMap = new HashMap<String, String>();
+        Map<String, String> filterMap = new HashMap<>();
         if(m.find() && m.groupCount() == 2) {
-            String logTime = m.group(1);
+            //String logTime = m.group(1);
             String fieldInfo = m.group(2);
             for(String elem : fieldInfo.split("&")) {
-                if(elem.indexOf("=") == -1) {
+                if(!elem.contains("=")) {
                     continue;
                 }
                 String key = elem.split("=", 2)[0];
